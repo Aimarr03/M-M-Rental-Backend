@@ -1520,6 +1520,134 @@
                 ]
             }
         },
+        "/car/categories": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get all vehicle categories",
+                "description": "This endpoint is used to get all vehicle categories that are available in the database.",
+                "operationId": "0050e4035d0ef0f652ce151119883a44",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved all vehicle types",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "integer",
+                                                    "example": 200
+                                                },
+                                                "is_success": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Success get all vehicle types."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "jenis_kendaraan": {
+                                                        "type": "string",
+                                                        "example": "Sedan"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "integer",
+                                                    "example": 401
+                                                },
+                                                "is_success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized access"
+                                        },
+                                        "data": {
+                                            "type": "null",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "integer",
+                                                    "example": 500
+                                                },
+                                                "is_success": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "An error occurred while fetching vehicle types."
+                                        },
+                                        "data": {
+                                            "type": "null",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/user/register": {
             "post": {
                 "tags": [

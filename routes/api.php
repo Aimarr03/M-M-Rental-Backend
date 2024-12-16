@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CarController;
+use App\Http\Controllers\Api\JenisMobilController;
 use App\Http\Controllers\Api\ReservasiController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -58,6 +59,7 @@ Route::prefix('/admin')->middleware('auth.jwt')->group(function () {
 
 Route::prefix('/car')->middleware('auth.jwt')->group(function() {
     Route::get('/all', [CarController::class, 'getAll']);
+    Route::get('/categories', [JenisMobilController::class, 'getAllVehicleType']);
     Route::get('/{id}', [CarController::class, 'getByID']);
     Route::get('/category/{id_kategori}', [CarController::class, 'getCarsByCategory']);
     Route::get('/status/{id_status}', [CarController::class, 'getCarsByStatusID']);

@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 
 /**
  * @OA\Get(
- *     path="/car/categories",
+ *     path="/api/car/categories",
  *     summary="Get all vehicle categories",
  *     description="This endpoint is used to get all vehicle categories that are available in the database.",
  *     tags={"Car"},

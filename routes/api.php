@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,8 @@ Route::prefix('/user')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth.jwt');
     Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth.jwt');
     Route::get('/current-user', [AuthController::class, 'me'])->middleware('auth.jwt');
+});
+Route::prefix('/car')->group(function(){
+    Route::get('/all', [SearchController::class, 'GetListKendaraan']);
+    Route::get('/{id}', [SearchController::class, 'GetKendaraan']);
 });

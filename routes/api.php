@@ -3,6 +3,10 @@
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\CarController;
+use App\Http\Controllers\Api\JenisMobilController;
+use App\Http\Controllers\Api\ReservasiController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,12 +25,45 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get("/stuff", function() {
+    return ["a" => 1];
+});
+
 Route::prefix('/user')->group(function () {
     Route::post('/register', RegisterController::class)->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth.jwt');
-    Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth.jwt');
-    Route::get('/current-user', [AuthController::class, 'me'])->middleware('auth.jwt');
+
+    Route::middleware('auth.jwt')->group(function (){
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/refresh', [AuthController::class, 'refresh']);
+        Route::get('/current-user', [AuthController::class, 'me']);
+        Route::patch('/update', [UserController::class, 'updateProfile']);
+
+        Route::get('/reservations', [ReservasiController::class, 'getUserReservationHistory']);
+        Route::post('/reservation/new', [ReservasiController::class, 'newReservation']);
+    });
+});
+
+Route::prefix('/admin')->middleware('auth.jwt')->group(function () {
+    Route::middleware('role:admin')->group(function () {
+        Route::prefix('/car')->group(function () {
+            Route::post('/add', [CarController::class, 'addNew']);
+            Route::patch('/update/{id}', [CarController::class, 'update']);
+            Route::delete('/delete/{id}', [CarController::class, 'deleteCar']);
+        });
+
+        Route::prefix('/reservations')->group(function () {
+            Route::get('/all', [ReservasiController::class, 'getAllReservations']);
+        });
+    });
+});
+
+Route::prefix('/car')->middleware('auth.jwt')->group(function() {
+    Route::get('/all', [CarController::class, 'getAll']);
+    Route::get('/categories', [JenisMobilController::class, 'getAllVehicleType']);
+    Route::get('/{id}', [CarController::class, 'getByID']);
+    Route::get('/category/{id_kategori}', [CarController::class, 'getCarsByCategory']);
+    Route::get('/status/{id_status}', [CarController::class, 'getCarsByStatusID']);
 });
 Route::prefix('/car')->group(function(){
     Route::get('/all', [SearchController::class, 'GetListKendaraan']);

@@ -1,0 +1,1720 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "M&M Car Rental Backend API Documentation",
+        "description": "This is an API documentation for M&M Car Rental Backend API. You can find all the endpoints and their descriptions here.",
+        "contact": {
+            "email": "syahrezafistiferdian32@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/",
+            "description": "M&M Car Rental Backend Service"
+        }
+    ],
+    "paths": {
+        "/api/user/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "description": "Digunakan untuk login ke dalam aplikasi",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "Email",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "Password",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Message",
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "description": "Data",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "description": "Digunakan untuk logout dari aplikasi",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Message",
+                                            "type": "string",
+                                            "example": "successfully logged out"
+                                        },
+                                        "data": {
+                                            "description": "Data",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/current-user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get current logged in user",
+                "description": "This endpoint retrieves the current user who is logged in to the application based on the provided Bearer token. It returns user details such as ID, email, and role, or an error message if the user is not authenticated or the token is invalid/expired.",
+                "operationId": "getCurrentUser",
+                "responses": {
+                    "200": {
+                        "description": "User retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Message",
+                                            "type": "string",
+                                            "example": "User retrieved successfully"
+                                        },
+                                        "data": {
+                                            "description": "User data",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "User ID",
+                                                    "type": "integer"
+                                                },
+                                                "email": {
+                                                    "description": "User email",
+                                                    "type": "string",
+                                                    "format": "email"
+                                                },
+                                                "nama_user": {
+                                                    "description": "User name",
+                                                    "type": "string"
+                                                },
+                                                "phone_number": {
+                                                    "description": "User phone number",
+                                                    "type": "string"
+                                                },
+                                                "role_id": {
+                                                    "description": "User role ID",
+                                                    "type": "integer"
+                                                },
+                                                "alamat": {
+                                                    "description": "User address",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car/all": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get all cars",
+                "description": "Retrieve all cars from the database. If no cars are found, a 204 No Content response will be returned. If data is found, a 200 OK response with the car data is returned.",
+                "operationId": "getAllCars",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "description": "List of cars",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Car ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "model": {
+                                                        "description": "Car model",
+                                                        "type": "string"
+                                                    },
+                                                    "make": {
+                                                        "description": "Car make",
+                                                        "type": "string"
+                                                    },
+                                                    "year": {
+                                                        "description": "Year of manufacture",
+                                                        "type": "integer"
+                                                    },
+                                                    "status_id": {
+                                                        "description": "Status ID of the car",
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No content found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 204,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Message indicating no data",
+                                            "type": "string",
+                                            "example": "Data not found"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "An error occurred"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car/{id}": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get car by ID",
+                "description": "Retrieve a car by its ID. If no car is found with the provided ID, a 404 Not Found response will be returned. If the car is found, a 200 OK response with the car data is returned.",
+                "operationId": "getCarByID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the car to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "description": "Car data",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Car ID",
+                                                    "type": "integer"
+                                                },
+                                                "model": {
+                                                    "description": "Car model",
+                                                    "type": "string"
+                                                },
+                                                "make": {
+                                                    "description": "Car make",
+                                                    "type": "string"
+                                                },
+                                                "year": {
+                                                    "description": "Year of manufacture",
+                                                    "type": "integer"
+                                                },
+                                                "status_id": {
+                                                    "description": "Status ID of the car",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 404,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Message indicating no data was found",
+                                            "type": "string",
+                                            "example": "Data not found"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "An error occurred"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/add": {
+            "post": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Add a new car",
+                "description": "This endpoint allows an admin to add a new car to the system. It requires authentication and the user must have an admin role.",
+                "operationId": "addNewCar",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama_mobil",
+                                    "tahun",
+                                    "plat_nomor",
+                                    "id_jenis",
+                                    "kapasitas_penumpang",
+                                    "harga_sewa",
+                                    "status_id",
+                                    "transmisi"
+                                ],
+                                "properties": {
+                                    "nama_mobil": {
+                                        "description": "Car model name",
+                                        "type": "string",
+                                        "example": "Toyota Corolla"
+                                    },
+                                    "tahun": {
+                                        "description": "Car manufacturing year",
+                                        "type": "integer",
+                                        "example": 2020
+                                    },
+                                    "plat_nomor": {
+                                        "description": "Car plate number",
+                                        "type": "string",
+                                        "example": "B1234XYZ"
+                                    },
+                                    "id_jenis": {
+                                        "description": "Car type ID (references the 'jenis_mobil' table)",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "kapasitas_penumpang": {
+                                        "description": "Passenger capacity",
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "harga_sewa": {
+                                        "description": "Car rental price per day",
+                                        "type": "integer",
+                                        "example": 100000
+                                    },
+                                    "foto": {
+                                        "description": "Car image URL (optional)",
+                                        "type": "string",
+                                        "example": "image_url.jpg"
+                                    },
+                                    "status_id": {
+                                        "description": "Car status ID (references the 'status' table)",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "transmisi": {
+                                        "description": "Transmission type, either 'manual' or 'automatic'",
+                                        "type": "string",
+                                        "example": "automatic"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New car added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 201,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "New car added successfully"
+                                        },
+                                        "data": {
+                                            "description": "Added car data",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Car ID",
+                                                    "type": "integer"
+                                                },
+                                                "nama_mobil": {
+                                                    "description": "Car model name",
+                                                    "type": "string"
+                                                },
+                                                "tahun": {
+                                                    "description": "Car manufacturing year",
+                                                    "type": "integer"
+                                                },
+                                                "plat_nomor": {
+                                                    "description": "Car plate number",
+                                                    "type": "string"
+                                                },
+                                                "id_jenis": {
+                                                    "description": "Car type ID",
+                                                    "type": "integer"
+                                                },
+                                                "kapasitas_penumpang": {
+                                                    "description": "Passenger capacity",
+                                                    "type": "integer"
+                                                },
+                                                "harga_sewa": {
+                                                    "description": "Car rental price per day",
+                                                    "type": "integer"
+                                                },
+                                                "foto": {
+                                                    "description": "Car image URL",
+                                                    "type": "string"
+                                                },
+                                                "status_id": {
+                                                    "description": "Car status ID",
+                                                    "type": "integer"
+                                                },
+                                                "transmisi": {
+                                                    "description": "Transmission type",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 400,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Validation error message",
+                                            "type": "string",
+                                            "example": "Validation Failed"
+                                        },
+                                        "data": {
+                                            "description": "Validation errors",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 403,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Permission error message",
+                                            "type": "string",
+                                            "example": "Access denied: Only admins can add cars"
+                                        },
+                                        "data": {
+                                            "description": "No data",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Failed to add new car"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car/update/{id}": {
+            "patch": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Update car details",
+                "description": "This endpoint allows an admin to update the details of a car by its ID. It requires authentication and the user must have an admin role.",
+                "operationId": "updateCar",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the car to update (UUID format)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "nama_mobil": {
+                                        "description": "Car model name",
+                                        "type": "string",
+                                        "example": "Honda Civic"
+                                    },
+                                    "tahun": {
+                                        "description": "Car manufacturing year",
+                                        "type": "integer",
+                                        "example": 2021
+                                    },
+                                    "plat_nomor": {
+                                        "description": "Car plate number",
+                                        "type": "string",
+                                        "example": "B1234ABC"
+                                    },
+                                    "id_jenis": {
+                                        "description": "Car type ID (references the 'jenis_mobil' table)",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "kapasitas_penumpang": {
+                                        "description": "Passenger capacity",
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "harga_sewa": {
+                                        "description": "Car rental price per day",
+                                        "type": "integer",
+                                        "example": 120000
+                                    },
+                                    "foto": {
+                                        "description": "Updated car image URL (optional)",
+                                        "type": "string",
+                                        "example": "image_url_updated.jpg"
+                                    },
+                                    "status_id": {
+                                        "description": "Car status ID (references the 'status' table)",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "transmisi": {
+                                        "description": "Transmission type, either 'manual' or 'automatic'",
+                                        "type": "string",
+                                        "example": "manual"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Car updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Car updated successfully"
+                                        },
+                                        "data": {
+                                            "description": "Updated car data",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Car ID (UUID format)",
+                                                    "type": "string"
+                                                },
+                                                "nama_mobil": {
+                                                    "description": "Car model name",
+                                                    "type": "string"
+                                                },
+                                                "tahun": {
+                                                    "description": "Car manufacturing year",
+                                                    "type": "integer"
+                                                },
+                                                "plat_nomor": {
+                                                    "description": "Car plate number",
+                                                    "type": "string"
+                                                },
+                                                "id_jenis": {
+                                                    "description": "Car type ID",
+                                                    "type": "integer"
+                                                },
+                                                "kapasitas_penumpang": {
+                                                    "description": "Passenger capacity",
+                                                    "type": "integer"
+                                                },
+                                                "harga_sewa": {
+                                                    "description": "Car rental price per day",
+                                                    "type": "integer"
+                                                },
+                                                "foto": {
+                                                    "description": "Car image URL",
+                                                    "type": "string"
+                                                },
+                                                "status_id": {
+                                                    "description": "Car status ID",
+                                                    "type": "integer"
+                                                },
+                                                "transmisi": {
+                                                    "description": "Transmission type",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Failed or Invalid ID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 400,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Invalid ID format or Validation Failed"
+                                        },
+                                        "data": {
+                                            "description": "Validation errors or ID format error",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 403,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Permission error message",
+                                            "type": "string",
+                                            "example": "Access denied: Only admins can update cars"
+                                        },
+                                        "data": {
+                                            "description": "No data",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Car not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 404,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "There is no car with this ID"
+                                        },
+                                        "data": {
+                                            "description": "No data",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Failed to update car"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/category/{id_kategori}": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get cars by category",
+                "description": "This endpoint allows users to retrieve cars that belong to a specific category by providing the category ID.",
+                "operationId": "getCarsByCategory",
+                "parameters": [
+                    {
+                        "name": "id_kategori",
+                        "in": "path",
+                        "description": "ID of the car category (integer, references 'jenis_mobil' table)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cars in the specified category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "description": "List of cars",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Car ID (UUID format)",
+                                                        "type": "string"
+                                                    },
+                                                    "nama_mobil": {
+                                                        "description": "Car model name",
+                                                        "type": "string"
+                                                    },
+                                                    "tahun": {
+                                                        "description": "Car manufacturing year",
+                                                        "type": "integer"
+                                                    },
+                                                    "plat_nomor": {
+                                                        "description": "Car plate number",
+                                                        "type": "string"
+                                                    },
+                                                    "id_jenis": {
+                                                        "description": "Car type ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "kapasitas_penumpang": {
+                                                        "description": "Passenger capacity",
+                                                        "type": "integer"
+                                                    },
+                                                    "harga_sewa": {
+                                                        "description": "Car rental price per day",
+                                                        "type": "integer"
+                                                    },
+                                                    "foto": {
+                                                        "description": "Car image URL",
+                                                        "type": "string"
+                                                    },
+                                                    "status_id": {
+                                                        "description": "Car status ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "transmisi": {
+                                                        "description": "Transmission type",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid category ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 400,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Invalid category ID"
+                                        },
+                                        "data": {
+                                            "description": "Validation errors for the category ID",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No cars found in this category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 404,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "There is no car in this category"
+                                        },
+                                        "data": {
+                                            "description": "No cars in the specified category",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Failed to fetch cars by category"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/status/{status_id}": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get cars by status ID",
+                "description": "This endpoint allows users to retrieve cars that are assigned a specific status ID.",
+                "operationId": "getCarsByStatusID",
+                "parameters": [
+                    {
+                        "name": "status_id",
+                        "in": "path",
+                        "description": "ID of the car status (integer, references 'status' table)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cars with the specified status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "description": "List of cars",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Car ID (UUID format)",
+                                                        "type": "string"
+                                                    },
+                                                    "nama_mobil": {
+                                                        "description": "Car model name",
+                                                        "type": "string"
+                                                    },
+                                                    "tahun": {
+                                                        "description": "Car manufacturing year",
+                                                        "type": "integer"
+                                                    },
+                                                    "plat_nomor": {
+                                                        "description": "Car plate number",
+                                                        "type": "string"
+                                                    },
+                                                    "id_jenis": {
+                                                        "description": "Car type ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "kapasitas_penumpang": {
+                                                        "description": "Passenger capacity",
+                                                        "type": "integer"
+                                                    },
+                                                    "harga_sewa": {
+                                                        "description": "Car rental price per day",
+                                                        "type": "integer"
+                                                    },
+                                                    "foto": {
+                                                        "description": "Car image URL",
+                                                        "type": "string"
+                                                    },
+                                                    "status_id": {
+                                                        "description": "Car status ID",
+                                                        "type": "integer"
+                                                    },
+                                                    "transmisi": {
+                                                        "description": "Transmission type",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 400,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Invalid status ID"
+                                        },
+                                        "data": {
+                                            "description": "Validation errors for the status ID",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No cars found with the specified status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 404,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Currently there is no car with this status"
+                                        },
+                                        "data": {
+                                            "description": "No cars with the specified status",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Failed to fetch cars by status"
+                                        },
+                                        "data": {
+                                            "description": "No data returned",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/{id}": {
+            "delete": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Delete a car by ID",
+                "description": "This endpoint allows an admin to delete a car using its ID. Only admins can access this endpoint.",
+                "operationId": "deleteCar",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the car to be deleted (UUID format)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Car deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "object",
+                                            "example": {
+                                                "code": 200,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Car deleted successfully"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "object",
+                                            "example": {
+                                                "code": 400,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid ID format"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Car not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "object",
+                                            "example": {
+                                                "code": 404,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "There is no car with this ID"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Only admins can access this endpoint",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "object",
+                                            "example": {
+                                                "code": 403,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized access, only admins can delete cars"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to delete car"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user",
+                "description": "This endpoint registers a new user by accepting the user's name, email, password, phone number, and address. The system will create a new user record in the database with a default role of 2 (User).",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "phone_number",
+                                    "alamat"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Full name of the user",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum length 6 characters)",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "phone_number": {
+                                        "description": "User's phone number",
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "alamat": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "example": "123 Street Name, City, Country"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status of the request",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 201,
+                                                "is_success": true
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "data": {
+                                            "description": "Created user data",
+                                            "properties": {
+                                                "id": {
+                                                    "description": "User ID",
+                                                    "type": "integer"
+                                                },
+                                                "nama_user": {
+                                                    "description": "User full name",
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "description": "User email",
+                                                    "type": "string"
+                                                },
+                                                "phone_number": {
+                                                    "description": "User phone number",
+                                                    "type": "string"
+                                                },
+                                                "role_id": {
+                                                    "description": "User role ID",
+                                                    "type": "integer"
+                                                },
+                                                "alamat": {
+                                                    "description": "User address",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 400,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Validation error message",
+                                            "type": "string",
+                                            "example": "Validation Failed"
+                                        },
+                                        "data": {
+                                            "description": "Validation errors",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status",
+                                            "type": "object",
+                                            "example": {
+                                                "code": 500,
+                                                "is_success": false
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Failed to create user"
+                                        },
+                                        "data": {
+                                            "description": "No additional data",
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        },
+        {
+            "name": "Car",
+            "description": "Car"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "description": "JWT Authorization header using the Bearer scheme.",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

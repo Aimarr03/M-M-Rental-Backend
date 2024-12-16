@@ -14,6 +14,94 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
+/**
+* @OA\Post(
+*      path="/api/user/login",
+*      tags={"Auth"},
+*      summary="Login",
+*      operationId="login",
+*      description="Digunakan untuk login ke dalam aplikasi",
+*      @OA\RequestBody(
+*         required=true,
+*         @OA\JsonContent(
+*            required={"email", "password"},
+*            @OA\Property(property="email", type="string", format="email", example="johndoe@gmail.com", description="Email"),
+*            @OA\Property(property="password", type="string", format="password", example="password", description="Password"),
+*        ),
+*    ),
+*     @OA\Response(
+*          response=200,
+*          description="Success",
+*          @OA\JsonContent(
+*               @OA\Property(property="status", type="object", example={"code": 200, "is_success": true}, description="Status"),
+*               @OA\Property(property="message", type="string", example="Success", description="Message"),
+*               @OA\Property(property="data", type="object", description="Data"),
+*          ),
+*   ),
+*)
+
+* @OA\Post(
+*      path="/api/user/logout",
+*      tags={"Auth"},
+*      summary="Logout",
+*      operationId="logout",
+*      description="Digunakan untuk logout dari aplikasi",
+*      @OA\Response(
+*          response=200,
+*          description="Successfully logged out",
+*          @OA\JsonContent(
+*               @OA\Property(property="status", type="object", example={"code": 200, "is_success": true}, description="Status"),
+*               @OA\Property(property="message", type="string", example="successfully logged out", description="Message"),
+*               @OA\Property(property="data", type="null", description="Data"),
+*          ),
+*   ),
+* )
+*
+* @OA\Get(
+*      path="/api/user/current-user",
+*      tags={"User"},
+*      summary="Get current logged in user",
+*      description="This endpoint retrieves the current user who is logged in to the application based on the provided Bearer token. It returns user details such as ID, email, and role, or an error message if the user is not authenticated or the token is invalid/expired.",
+*      operationId="getCurrentUser",
+*      security={{"bearerAuth": {}}},
+*      @OA\Response(
+*          response=200,
+*          description="User retrieved successfully",
+*          @OA\JsonContent(
+*               @OA\Property(property="status", type="object", example={"code": 200, "is_success": true}, description="Status"),
+*               @OA\Property(property="message", type="string", example="User retrieved successfully", description="Message"),
+*               @OA\Property(property="data", type="object", description="User data",
+*                   @OA\Property(property="id", type="integer", description="User ID"),
+*                   @OA\Property(property="email", type="string", format="email", description="User email"),
+*                   @OA\Property(property="nama_user", type="string", description="User name"),
+*                   @OA\Property(property="phone_number", type="string", description="User phone number"),
+*                   @OA\Property(property="role_id", type="integer", description="User role ID"),
+*                   @OA\Property(property="alamat", type="string", description="User address")
+*               ),
+*          ),
+*          @OA\Response(
+*              response=401,
+*              description="Unauthorized: User not found or token expired",
+*              @OA\JsonContent(
+*                  @OA\Property(property="status", type="object", example={"code": 401, "is_success": false}, description="Status"),
+*                  @OA\Property(property="message", type="string", example="Unauthorized: User not found", description="Message"),
+*                  @OA\Property(property="data", type="null", description="Data")
+*              ),
+*          ),
+*          @OA\Response(
+*              response=500,
+*              description="Internal Server Error",
+*              @OA\JsonContent(
+*                  @OA\Property(property="status", type="object", example={"code": 500, "is_success": false}, description="Status"),
+*                  @OA\Property(property="message", type="string", example="An error occurred while parsing the token", description="Message"),
+*                  @OA\Property(property="data", type="null", description="Data")
+*              ),
+*          ),
+*   )
+* )
+*/
+
+
 class AuthController extends Controller
 {
     public function login(Request $request) {
@@ -41,7 +129,7 @@ class AuthController extends Controller
                     "code" => Response::HTTP_BAD_REQUEST,
                     "is_success" => false,
                 ],
-                "message" => "Unauthorized",
+                "message" => "Email atau Password Salah",
                 "data" => null,
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -79,60 +167,17 @@ class AuthController extends Controller
         return $this->respondWithToken(JWTAuth::refresh());
     }
 
-    public function me() {
-        try {
-            $user = auth()->guard('api')->user();
+    public function me(Request $request) {
+        $user = $request->auth_user;
 
-            if (!$user) {
-                return response()->json([
-                    'status' => [
-                        'code' => Response::HTTP_UNAUTHORIZED,
-                        'is_success' => false,
-                    ],
-                    'message' => 'Unauthorized: User not found',
-                    'data' => null,
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_OK,
-                    'is_success' => true,
-                ],
-                'message' => 'User retrieved successfully',
-                'data' => $user,
-            ], Response::HTTP_OK);
-
-        } catch (TokenExpiredException $e) {
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_UNAUTHORIZED,
-                    'is_success' => false,
-                ],
-                'message' => 'Unauthorized: Token has expired',
-                'data' => null,
-            ], Response::HTTP_UNAUTHORIZED);
-
-        } catch (TokenInvalidException $e) {
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_UNAUTHORIZED,
-                    'is_success' => false,
-                ],
-                'message' => 'Unauthorized: Token is invalid',
-                'data' => null,
-            ], Response::HTTP_UNAUTHORIZED);
-
-        } catch (JWTException $e) {
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                    'is_success' => false,
-                ],
-                'message' => 'An error occurred while parsing the token',
-                'data' => null,
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return response()->json([
+            "status" => [
+                "code" => Response::HTTP_OK,
+                "is_success" => true,
+            ],
+            "message" => "User retrieved successfully",
+            "data" => $user,
+        ], Response::HTTP_OK);
     }
 
     public function respondWithToken($token) {

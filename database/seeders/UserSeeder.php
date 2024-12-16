@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'email' => 'admin@gmail.com',
-                'password_hash' => Hash::make('admin'),
+                'password_hash' => Hash::make('admin123'),
                 'nama_user' => 'Admin',
                 'phone_number' => '081234567890',
                 'role_id' => 1,

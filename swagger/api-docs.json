@@ -1520,14 +1520,14 @@
                 ]
             }
         },
-        "/car/categories": {
+        "/api/car/categories": {
             "get": {
                 "tags": [
                     "Car"
                 ],
                 "summary": "Get all vehicle categories",
                 "description": "This endpoint is used to get all vehicle categories that are available in the database.",
-                "operationId": "0050e4035d0ef0f652ce151119883a44",
+                "operationId": "1d631c1bc788590fa465622ff499c854",
                 "responses": {
                     "200": {
                         "description": "Successfully retrieved all vehicle types",

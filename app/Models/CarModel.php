@@ -25,7 +25,7 @@ class CarModel extends Model
 
     public function jenis()
     {
-        return $this->belongsTo(JenisMobil::class, 'id_jenis');
+        return $this->belongsTo(JenisMobilModel::class, 'id_jenis');
     }
 
     public function status()

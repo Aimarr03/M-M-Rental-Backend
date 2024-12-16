@@ -167,60 +167,17 @@ class AuthController extends Controller
         return $this->respondWithToken(JWTAuth::refresh());
     }
 
-    public function me() {
-        try {
-            $user = auth()->guard('api')->user();
+    public function me(Request $request) {
+        $user = $request->auth_user;
 
-            if (!$user) {
-                return response()->json([
-                    'status' => [
-                        'code' => Response::HTTP_UNAUTHORIZED,
-                        'is_success' => false,
-                    ],
-                    'message' => 'Unauthorized: User not found',
-                    'data' => null,
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_OK,
-                    'is_success' => true,
-                ],
-                'message' => 'User retrieved successfully',
-                'data' => $user,
-            ], Response::HTTP_OK);
-
-        } catch (TokenExpiredException $e) {
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_UNAUTHORIZED,
-                    'is_success' => false,
-                ],
-                'message' => 'Unauthorized: Token has expired',
-                'data' => null,
-            ], Response::HTTP_UNAUTHORIZED);
-
-        } catch (TokenInvalidException $e) {
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_UNAUTHORIZED,
-                    'is_success' => false,
-                ],
-                'message' => 'Unauthorized: Token is invalid',
-                'data' => null,
-            ], Response::HTTP_UNAUTHORIZED);
-
-        } catch (JWTException $e) {
-            return response()->json([
-                'status' => [
-                    'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                    'is_success' => false,
-                ],
-                'message' => 'An error occurred while parsing the token',
-                'data' => null,
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return response()->json([
+            "status" => [
+                "code" => Response::HTTP_OK,
+                "is_success" => true,
+            ],
+            "message" => "User retrieved successfully",
+            "data" => $user,
+        ], Response::HTTP_OK);
     }
 
     public function respondWithToken($token) {

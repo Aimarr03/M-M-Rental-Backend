@@ -106,8 +106,8 @@ use Illuminate\Support\Facades\Validator;
 *
 
 * @OA\Post(
-*      path="/api/cars/add",
-*      tags={"Car"},
+*      path="/api/admin/car/add",
+*      tags={"Admin"},
 *      summary="Add a new car",
 *      description="This endpoint allows an admin to add a new car to the system. It requires authentication and the user must have an admin role.",
 *      operationId="addNewCar",
@@ -178,8 +178,8 @@ use Illuminate\Support\Facades\Validator;
 *
 
 * @OA\Patch(
-*      path="/api/car/update/{id}",
-*      tags={"Car"},
+*      path="/api/admin/car/update/{id}",
+*      tags={"Admin"},
 *      summary="Update car details",
 *      description="This endpoint allows an admin to update the details of a car by its ID. It requires authentication and the user must have an admin role.",
 *      operationId="updateCar",
@@ -400,8 +400,8 @@ use Illuminate\Support\Facades\Validator;
 *
 
 * @OA\Delete(
-*     path="/api/cars/{id}",
-*     tags={"Car"},
+*     path="/api/admin/car/delete/{id}",
+*     tags={"Admin"},
 *     summary="Delete a car by ID",
 *     description="This endpoint allows an admin to delete a car using its ID. Only admins can access this endpoint.",
 *     operationId="deleteCar",
